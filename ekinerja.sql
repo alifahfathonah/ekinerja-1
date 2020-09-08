@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.2
+-- version 4.6.6deb5
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Sep 05, 2020 at 12:04 AM
--- Server version: 10.4.11-MariaDB
--- PHP Version: 7.4.4
+-- Host: localhost:3306
+-- Generation Time: Sep 09, 2020 at 02:28 AM
+-- Server version: 5.7.31-0ubuntu0.18.04.1
+-- PHP Version: 7.4.9
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-START TRANSACTION;
 SET time_zone = "+00:00";
 
 
@@ -30,9 +29,9 @@ SET time_zone = "+00:00";
 CREATE TABLE `agenda` (
   `id` smallint(4) UNSIGNED NOT NULL,
   `title` varchar(100) DEFAULT NULL,
-  `url` text DEFAULT NULL,
+  `url` text,
   `class` varchar(30) NOT NULL DEFAULT 'event-success',
-  `start` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE current_timestamp(),
+  `start` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
   `end` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `active` enum('YES','NO') NOT NULL DEFAULT 'NO',
   `created_by` int(11) DEFAULT NULL,
@@ -62,7 +61,9 @@ CREATE TABLE `bahasa_asing` (
 --
 
 INSERT INTO `bahasa_asing` (`id`, `fid_user`, `bahasa`, `aktif`, `pasif`, `created_date`, `updated_date`) VALUES
-(1, 1, 'Mandarin', 'Ya', 'Ya', '2019-04-05 10:23:14', NULL);
+(1, 1, 'Mandarin', 'Ya', 'Ya', '2019-04-05 10:23:14', NULL),
+(2, 10, 'INGGRIS', 'Ya', 'Ya', '2020-09-08 20:20:28', '2020-09-08 20:21:11'),
+(3, 10, 'JEPANG', 'Tidak', 'Tidak', '2020-09-08 20:20:51', NULL);
 
 -- --------------------------------------------------------
 
@@ -73,7 +74,7 @@ INSERT INTO `bahasa_asing` (`id`, `fid_user`, `bahasa`, `aktif`, `pasif`, `creat
 CREATE TABLE `disiplin` (
   `id` int(11) UNSIGNED NOT NULL,
   `fid_user` int(11) DEFAULT NULL,
-  `tahun` year(4) NOT NULL DEFAULT 0000,
+  `tahun` year(4) NOT NULL DEFAULT '0000',
   `tingkat` varchar(50) DEFAULT NULL,
   `jenis` varchar(50) DEFAULT NULL,
   `created_date` timestamp NULL DEFAULT NULL,
@@ -85,7 +86,9 @@ CREATE TABLE `disiplin` (
 --
 
 INSERT INTO `disiplin` (`id`, `fid_user`, `tahun`, `tingkat`, `jenis`, `created_date`, `updated_date`) VALUES
-(1, 1, 2018, 'Ringan', 'Potong Gaji', '2019-04-05 10:09:48', NULL);
+(1, 1, 2018, 'Ringan', 'Potong Gaji', '2019-04-05 10:09:48', NULL),
+(2, 10, 2013, 'A', 'BERSIHIN KELAS', '2020-09-08 20:17:28', NULL),
+(3, 10, 2015, 'b', 'tidak ada', '2020-09-08 20:17:48', '2020-09-08 20:18:02');
 
 -- --------------------------------------------------------
 
@@ -99,13 +102,13 @@ CREATE TABLE `dp3` (
   `tahun` year(4) DEFAULT NULL,
   `pejabat` int(11) DEFAULT NULL,
   `atasan_pejabat` int(11) DEFAULT NULL,
-  `nilai_orientasi` decimal(4,2) NOT NULL DEFAULT 0.00,
-  `nilai_integritas` decimal(4,2) NOT NULL DEFAULT 0.00,
-  `nilai_komitmen` decimal(4,2) NOT NULL DEFAULT 0.00,
-  `nilai_disiplin` decimal(4,2) NOT NULL DEFAULT 0.00,
-  `nilai_kerjasama` decimal(4,2) NOT NULL DEFAULT 0.00,
-  `nilai_kepemimpinan` decimal(4,2) NOT NULL DEFAULT 0.00,
-  `nilai_avg` decimal(4,2) NOT NULL DEFAULT 0.00,
+  `nilai_orientasi` decimal(4,2) NOT NULL DEFAULT '0.00',
+  `nilai_integritas` decimal(4,2) NOT NULL DEFAULT '0.00',
+  `nilai_komitmen` decimal(4,2) NOT NULL DEFAULT '0.00',
+  `nilai_disiplin` decimal(4,2) NOT NULL DEFAULT '0.00',
+  `nilai_kerjasama` decimal(4,2) NOT NULL DEFAULT '0.00',
+  `nilai_kepemimpinan` decimal(4,2) NOT NULL DEFAULT '0.00',
+  `nilai_avg` decimal(4,2) NOT NULL DEFAULT '0.00',
   `created_by` int(11) DEFAULT NULL,
   `created_date` timestamp NULL DEFAULT NULL,
   `updated_by` int(11) DEFAULT NULL,
@@ -125,8 +128,8 @@ CREATE TABLE `duk` (
   `fid_jabatan_akhir` int(11) DEFAULT NULL,
   `tahun_duk` int(4) DEFAULT NULL,
   `urutan_duk` bigint(20) DEFAULT NULL,
-  `thn_masakerja` int(11) NOT NULL DEFAULT 0,
-  `bln_masakerja` int(11) NOT NULL DEFAULT 0,
+  `thn_masakerja` int(11) NOT NULL DEFAULT '0',
+  `bln_masakerja` int(11) NOT NULL DEFAULT '0',
   `created_by` int(11) DEFAULT NULL,
   `created_date` timestamp NULL DEFAULT NULL,
   `updated_by` int(11) DEFAULT NULL,
@@ -151,12 +154,12 @@ CREATE TABLE `ekin_keg_bulanan` (
   `fid_user` int(11) DEFAULT NULL,
   `fid_keg_tahunan` int(11) DEFAULT NULL,
   `bulan` int(2) DEFAULT NULL,
-  `kegiatan` text DEFAULT NULL,
-  `kuantitas` decimal(4,2) NOT NULL DEFAULT 0.00,
+  `kegiatan` text,
+  `kuantitas` decimal(4,2) NOT NULL DEFAULT '0.00',
   `satuan` varchar(30) DEFAULT NULL,
-  `biaya` int(11) NOT NULL DEFAULT 0,
-  `angka_kredit` decimal(12,3) NOT NULL DEFAULT 0.000,
-  `waktu` int(2) NOT NULL DEFAULT 0,
+  `biaya` int(11) NOT NULL DEFAULT '0',
+  `angka_kredit` decimal(12,3) NOT NULL DEFAULT '0.000',
+  `waktu` int(2) NOT NULL DEFAULT '0',
   `periode_waktu` enum('Hari','Minggu','Bulan') DEFAULT NULL,
   `status` enum('Draft','Penilaian','Verifikasi','Diterima','Ditolak') NOT NULL DEFAULT 'Draft',
   `created_date` timestamp NULL DEFAULT NULL
@@ -180,13 +183,13 @@ CREATE TABLE `ekin_keg_bulanan_realisasi` (
   `id` int(11) UNSIGNED NOT NULL,
   `fid_user` int(11) DEFAULT NULL,
   `fid_keg_bulanan` int(11) DEFAULT NULL,
-  `kuantitas` decimal(4,2) NOT NULL DEFAULT 0.00,
-  `kualitas` int(3) NOT NULL DEFAULT 0,
-  `biaya` int(11) NOT NULL DEFAULT 0,
-  `angka_kredit` decimal(12,3) NOT NULL DEFAULT 0.000,
-  `waktu` int(2) NOT NULL DEFAULT 0,
-  `perhitungan` decimal(6,2) NOT NULL DEFAULT 0.00,
-  `nilai` decimal(5,2) NOT NULL DEFAULT 0.00,
+  `kuantitas` decimal(4,2) NOT NULL DEFAULT '0.00',
+  `kualitas` int(3) NOT NULL DEFAULT '0',
+  `biaya` int(11) NOT NULL DEFAULT '0',
+  `angka_kredit` decimal(12,3) NOT NULL DEFAULT '0.000',
+  `waktu` int(2) NOT NULL DEFAULT '0',
+  `perhitungan` decimal(6,2) NOT NULL DEFAULT '0.00',
+  `nilai` decimal(5,2) NOT NULL DEFAULT '0.00',
   `created_date` timestamp NULL DEFAULT NULL,
   `updated_date` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -201,13 +204,13 @@ CREATE TABLE `ekin_keg_tahunan` (
   `id` int(11) UNSIGNED NOT NULL,
   `fid_user` int(11) DEFAULT NULL,
   `tahun` char(4) DEFAULT '2019',
-  `kegiatan` text DEFAULT NULL,
+  `kegiatan` text,
   `jenis` enum('Tupoksi','Non-Tupoksi') DEFAULT NULL,
-  `target_kuantitas` decimal(5,2) NOT NULL DEFAULT 0.00,
+  `target_kuantitas` decimal(5,2) NOT NULL DEFAULT '0.00',
   `satuan` varchar(30) DEFAULT NULL,
-  `biaya` int(11) NOT NULL DEFAULT 0,
-  `angka_kredit` decimal(12,3) NOT NULL DEFAULT 0.000,
-  `target_penyelesaian` int(2) NOT NULL DEFAULT 12 COMMENT 'jmlBulan',
+  `biaya` int(11) NOT NULL DEFAULT '0',
+  `angka_kredit` decimal(12,3) NOT NULL DEFAULT '0.000',
+  `target_penyelesaian` int(2) NOT NULL DEFAULT '12' COMMENT 'jmlBulan',
   `status` enum('Draft','Penilaian','Verifikasi','Diterima','Ditolak') NOT NULL DEFAULT 'Draft',
   `fid_jabatan` smallint(3) DEFAULT NULL,
   `created_date` timestamp NULL DEFAULT NULL,
@@ -298,12 +301,12 @@ CREATE TABLE `ekin_tambahan_kreatifitas` (
   `id` int(11) UNSIGNED NOT NULL,
   `fid_user` int(11) DEFAULT NULL,
   `tahun` char(4) DEFAULT '2019',
-  `bulan` int(2) NOT NULL DEFAULT 0,
-  `kegiatan` text DEFAULT NULL,
+  `bulan` int(2) NOT NULL DEFAULT '0',
+  `kegiatan` text,
   `jenis` enum('Tugas Tambahan','Kreatifitas') DEFAULT NULL,
-  `file` text DEFAULT NULL,
-  `note` text DEFAULT NULL,
-  `nilai` int(2) NOT NULL DEFAULT 0,
+  `file` text,
+  `note` text,
+  `nilai` int(2) NOT NULL DEFAULT '0',
   `status` enum('Draft','Penilaian','Verifikasi','Diterima','Ditolak') NOT NULL DEFAULT 'Draft',
   `fid_jabatan` smallint(3) DEFAULT NULL,
   `created_date` timestamp NULL DEFAULT NULL,
@@ -326,12 +329,12 @@ INSERT INTO `ekin_tambahan_kreatifitas` (`id`, `fid_user`, `tahun`, `bulan`, `ke
 
 CREATE TABLE `jabatan` (
   `id` smallint(3) UNSIGNED NOT NULL,
-  `id_skpd` int(11) NOT NULL DEFAULT 1,
-  `parent` smallint(3) NOT NULL DEFAULT 0,
+  `id_skpd` int(11) NOT NULL DEFAULT '1',
+  `parent` smallint(3) NOT NULL DEFAULT '0',
   `nama` varchar(200) DEFAULT NULL,
   `type` enum('Staf','Pejabat') NOT NULL DEFAULT 'Staf',
-  `nilai` smallint(4) NOT NULL DEFAULT 100,
-  `kelas` smallint(2) NOT NULL DEFAULT 1,
+  `nilai` smallint(4) NOT NULL DEFAULT '100',
+  `kelas` smallint(2) NOT NULL DEFAULT '1',
   `aktif` enum('Ya','Tidak') NOT NULL DEFAULT 'Tidak',
   `created_by` int(11) DEFAULT NULL,
   `created_date` timestamp NULL DEFAULT NULL,
@@ -376,7 +379,9 @@ CREATE TABLE `keluarga` (
 --
 
 INSERT INTO `keluarga` (`id`, `fid_user`, `nip`, `nama`, `tgl_lahir`, `akte_lahir`, `status`, `surat_nikah`, `created_date`, `updated_date`) VALUES
-(1, 1, NULL, 'MELATI LESTARI', '1989-06-15', 'XXX', 'Istri', 'VVVV', '2019-04-05 10:31:29', NULL);
+(1, 1, NULL, 'MELATI LESTARI', '1989-06-15', 'XXX', 'Istri', 'VVVV', '2019-04-05 10:31:29', NULL),
+(2, 10, NULL, 'GILANG', '2020-09-09', '213123', 'Anak', '123123123', '2020-09-08 20:22:23', '2020-09-08 20:22:30'),
+(3, 10, NULL, 'GIGI', '2020-08-31', '23123', 'Istri', '23123', '2020-09-08 20:22:54', NULL);
 
 -- --------------------------------------------------------
 
@@ -439,12 +444,12 @@ INSERT INTO `kgb` (`id`, `fid_pegawai`, `gaji_lama`, `gaji_baru`, `tanggal`, `cr
 
 CREATE TABLE `menu` (
   `id` int(11) UNSIGNED NOT NULL,
-  `parent` int(11) NOT NULL DEFAULT 0,
+  `parent` int(11) NOT NULL DEFAULT '0',
   `url` varchar(50) DEFAULT NULL COMMENT 'id=17 default url =master/pejabat',
   `nama` varchar(50) DEFAULT NULL,
   `icon` varchar(30) NOT NULL DEFAULT 'fa fa-desktop',
-  `order` int(3) NOT NULL DEFAULT 0,
-  `active` tinyint(1) NOT NULL DEFAULT 1
+  `order` int(3) NOT NULL DEFAULT '0',
+  `active` tinyint(1) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -496,12 +501,12 @@ INSERT INTO `menu` (`id`, `parent`, `url`, `nama`, `icon`, `order`, `active`) VA
 
 CREATE TABLE `menu_backup` (
   `id` int(11) UNSIGNED NOT NULL,
-  `parent` int(11) NOT NULL DEFAULT 0,
+  `parent` int(11) NOT NULL DEFAULT '0',
   `url` varchar(50) DEFAULT NULL COMMENT 'id=17 default url =master/pejabat',
   `nama` varchar(50) DEFAULT NULL,
   `icon` varchar(30) NOT NULL DEFAULT 'fa fa-desktop',
-  `order` int(3) NOT NULL DEFAULT 0,
-  `active` tinyint(1) NOT NULL DEFAULT 1
+  `order` int(3) NOT NULL DEFAULT '0',
+  `active` tinyint(1) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -559,16 +564,16 @@ CREATE TABLE `pegawai` (
   `nama_panggilan` varchar(25) DEFAULT NULL,
   `nama` varchar(35) DEFAULT NULL,
   `fid_jabatan` smallint(3) DEFAULT NULL,
-  `tmp_lahir` text DEFAULT NULL,
+  `tmp_lahir` text,
   `tgl_lahir` date DEFAULT NULL,
   `gender` enum('L','P') DEFAULT NULL,
   `agama` varchar(15) NOT NULL DEFAULT 'Islam',
-  `alamat` text DEFAULT NULL,
+  `alamat` text,
   `no_hp` char(13) DEFAULT NULL,
   `npwp` varchar(30) DEFAULT NULL,
-  `jenis_pegawai` tinyint(1) NOT NULL DEFAULT 2,
-  `pangkat_golongan` smallint(2) NOT NULL DEFAULT 0,
-  `instansi_kerja` text DEFAULT NULL,
+  `jenis_pegawai` tinyint(1) NOT NULL DEFAULT '2',
+  `pangkat_golongan` smallint(2) NOT NULL DEFAULT '0',
+  `instansi_kerja` text,
   `unit_kerja` int(3) DEFAULT NULL,
   `tunjangan` varchar(20) DEFAULT NULL,
   `created_by` int(11) DEFAULT NULL,
@@ -596,7 +601,7 @@ CREATE TABLE `pejabat` (
   `id` smallint(3) UNSIGNED NOT NULL,
   `posisi` varchar(200) DEFAULT NULL,
   `organisasi` varchar(200) DEFAULT NULL,
-  `pangkat_golongan` smallint(2) NOT NULL DEFAULT 0,
+  `pangkat_golongan` smallint(2) NOT NULL DEFAULT '0',
   `nama` varchar(200) DEFAULT NULL,
   `nip` varchar(20) DEFAULT NULL,
   `aktif` enum('Ya','Tidak') NOT NULL DEFAULT 'Tidak',
@@ -623,7 +628,7 @@ INSERT INTO `pejabat` (`id`, `posisi`, `organisasi`, `pangkat_golongan`, `nama`,
 CREATE TABLE `penghargaan` (
   `id` int(11) UNSIGNED NOT NULL,
   `fid_user` int(11) DEFAULT NULL,
-  `tahun` year(4) NOT NULL DEFAULT 0000,
+  `tahun` year(4) NOT NULL DEFAULT '0000',
   `tingkat` varchar(50) DEFAULT NULL,
   `nama` varchar(100) DEFAULT NULL,
   `created_date` timestamp NULL DEFAULT NULL,
@@ -635,7 +640,9 @@ CREATE TABLE `penghargaan` (
 --
 
 INSERT INTO `penghargaan` (`id`, `fid_user`, `tahun`, `tingkat`, `nama`, `created_date`, `updated_date`) VALUES
-(1, 1, 2018, 'Nasional', 'Pembuatan Aplikasi', '2019-04-05 10:13:45', NULL);
+(1, 1, 2018, 'Nasional', 'Pembuatan Aplikasi', '2019-04-05 10:13:45', NULL),
+(2, 10, 2013, 'A', 'BALAP KARUNG', '2020-09-08 20:18:21', '2020-09-08 20:18:59'),
+(3, 10, 2019, 'B', 'MAKAN JAGUNG', '2020-09-08 20:19:26', NULL);
 
 -- --------------------------------------------------------
 
@@ -646,7 +653,7 @@ INSERT INTO `penghargaan` (`id`, `fid_user`, `tahun`, `tingkat`, `nama`, `create
 CREATE TABLE `prestasi` (
   `id` int(11) UNSIGNED NOT NULL,
   `fid_user` int(11) DEFAULT NULL,
-  `tahun` year(4) NOT NULL DEFAULT 0000,
+  `tahun` year(4) NOT NULL DEFAULT '0000',
   `tingkat` varchar(50) DEFAULT NULL,
   `bidang` varchar(50) DEFAULT NULL,
   `created_date` timestamp NULL DEFAULT NULL,
@@ -658,7 +665,9 @@ CREATE TABLE `prestasi` (
 --
 
 INSERT INTO `prestasi` (`id`, `fid_user`, `tahun`, `tingkat`, `bidang`, `created_date`, `updated_date`) VALUES
-(1, 1, 2018, 'Bulu Tangkis', 'Nasional', '2019-04-05 10:27:07', NULL);
+(1, 1, 2018, 'Bulu Tangkis', 'Nasional', '2019-04-05 10:27:07', NULL),
+(2, 10, 2013, 'A', 'KOMPUTER', '2020-09-08 20:21:26', '2020-09-08 20:21:45'),
+(3, 10, 2015, 'A', 'JARINGAN', '2020-09-08 20:21:59', NULL);
 
 -- --------------------------------------------------------
 
@@ -670,7 +679,7 @@ CREATE TABLE `profil` (
   `id` smallint(1) UNSIGNED NOT NULL,
   `nama` varchar(200) DEFAULT NULL,
   `kepala_sekolah` varchar(50) DEFAULT NULL,
-  `alamat` text DEFAULT NULL,
+  `alamat` text,
   `email` varchar(100) DEFAULT NULL,
   `telepon` varchar(12) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -693,11 +702,11 @@ CREATE TABLE `ptk` (
   `tgl_lahir` date NOT NULL DEFAULT '0000-00-00',
   `agama` enum('Islam','Kristen','Katholik','Hindu','Budha') NOT NULL DEFAULT 'Islam',
   `telepon` varchar(12) DEFAULT NULL,
-  `alamat` text DEFAULT NULL,
-  `pendidikan` tinyint(2) NOT NULL DEFAULT 0,
+  `alamat` text,
+  `pendidikan` tinyint(2) NOT NULL DEFAULT '0',
   `jurusan` varchar(100) DEFAULT NULL,
-  `status_kepegawaian` tinyint(2) NOT NULL DEFAULT 11,
-  `jenis_ptk` tinyint(2) NOT NULL DEFAULT 11,
+  `status_kepegawaian` tinyint(2) NOT NULL DEFAULT '11',
+  `jenis_ptk` tinyint(2) NOT NULL DEFAULT '11',
   `status` enum('YES','NO') DEFAULT 'YES',
   `created_by` int(11) DEFAULT NULL,
   `created_date` timestamp NULL DEFAULT NULL,
@@ -714,13 +723,13 @@ CREATE TABLE `ptk` (
 CREATE TABLE `riwayat_jabatan` (
   `id` int(11) UNSIGNED NOT NULL,
   `fid_user` int(11) DEFAULT NULL,
-  `jabatan` text DEFAULT NULL,
-  `unit_kerja` text DEFAULT NULL,
-  `eselon` text DEFAULT NULL,
+  `jabatan` text,
+  `unit_kerja` text,
+  `eselon` text,
   `tmt` varchar(20) DEFAULT NULL,
   `no_sk` varchar(50) DEFAULT NULL,
   `tgl_sk` date DEFAULT NULL,
-  `pejabat_sah` text DEFAULT NULL,
+  `pejabat_sah` text,
   `created_date` timestamp NULL DEFAULT NULL,
   `updated_date` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -731,7 +740,10 @@ CREATE TABLE `riwayat_jabatan` (
 
 INSERT INTO `riwayat_jabatan` (`id`, `fid_user`, `jabatan`, `unit_kerja`, `eselon`, `tmt`, `no_sk`, `tgl_sk`, `pejabat_sah`, `created_date`, `updated_date`) VALUES
 (1, 1, 'Tes Jabatan', 'Kominfo', '1', '2019-04-05', 'Cdd', '2019-04-05', '3', '2019-04-05 09:55:52', NULL),
-(2, 2, 'Staf', 'Kominfo', 'II', '2019-04-05', 'bbb', '2019-04-05', '5', '2019-04-05 10:45:03', NULL);
+(2, 2, 'Staf', 'Kominfo', 'II', '2019-04-05', 'bbb', '2019-04-05', '5', '2019-04-05 10:45:03', NULL),
+(3, 10, 'Staff', 'Dinas Doni', 'Staff Umum', '2020-09-08', '32143241', '2020-09-09', '1', '2020-09-08 19:56:24', '2020-09-08 20:07:44'),
+(4, 10, 'Staff', 'Dinas Doni', 'Staff Umum', '2020-09-08', '32143241', '2020-09-09', '1', '2020-09-08 19:56:43', '2020-09-08 20:12:58'),
+(5, 10, 'Kaprodi', 'DInas Kampus', 'Kampus', '2020-09-01', '234234', '2020-09-09', '1', '2020-09-08 20:13:33', NULL);
 
 -- --------------------------------------------------------
 
@@ -742,7 +754,7 @@ INSERT INTO `riwayat_jabatan` (`id`, `fid_user`, `jabatan`, `unit_kerja`, `eselo
 CREATE TABLE `riwayat_kesehatan` (
   `id` int(11) UNSIGNED NOT NULL,
   `fid_user` int(11) DEFAULT NULL,
-  `tahun` year(4) NOT NULL DEFAULT 0000,
+  `tahun` year(4) NOT NULL DEFAULT '0000',
   `penyakit` varchar(100) DEFAULT NULL,
   `dokter` varchar(100) DEFAULT NULL,
   `created_date` timestamp NULL DEFAULT NULL,
@@ -754,7 +766,9 @@ CREATE TABLE `riwayat_kesehatan` (
 --
 
 INSERT INTO `riwayat_kesehatan` (`id`, `fid_user`, `tahun`, `penyakit`, `dokter`, `created_date`, `updated_date`) VALUES
-(1, 1, 2017, 'Demam Berdarah', 'Dr. Talik', '2019-04-05 10:18:22', NULL);
+(1, 1, 2017, 'Demam Berdarah', 'Dr. Talik', '2019-04-05 10:18:22', NULL),
+(2, 10, 2013, 'MAGH', 'DR INDRA', '2020-09-08 20:19:46', '2020-09-08 20:19:53'),
+(3, 10, 2019, 'KORENGAN', 'DR SAIFUL', '2020-09-08 20:20:10', NULL);
 
 -- --------------------------------------------------------
 
@@ -768,8 +782,8 @@ CREATE TABLE `riwayat_pangkat` (
   `tmt` varchar(20) DEFAULT NULL,
   `no_sk` varchar(50) DEFAULT NULL,
   `tgl_sk` date DEFAULT NULL,
-  `pangkat_golongan` smallint(2) NOT NULL DEFAULT 0,
-  `pejabat_sah` text DEFAULT NULL,
+  `pangkat_golongan` smallint(2) NOT NULL DEFAULT '0',
+  `pejabat_sah` text,
   `created_date` timestamp NULL DEFAULT NULL,
   `updated_date` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -782,7 +796,12 @@ INSERT INTO `riwayat_pangkat` (`id`, `fid_user`, `tmt`, `no_sk`, `tgl_sk`, `pang
 (1, 1, '2015-04-05', 'Xxxxx', '2015-04-05', 9, '4', '2019-04-05 09:48:22', '2020-06-19 04:27:50'),
 (2, 2, '2019-04-05', 'GGGG', '2019-04-05', 9, '5', '2019-04-05 10:44:17', NULL),
 (3, 1, '123', '123', '0000-00-00', 10, '2', '2020-06-19 04:25:07', NULL),
-(4, 6, '2020-08-04', 'abcd/12ab/12/2020', '2020-08-04', 1, '2', '2020-08-26 02:27:49', NULL);
+(4, 6, '2020-08-04', 'abcd/12ab/12/2020', '2020-08-04', 1, '2', '2020-08-26 02:27:49', NULL),
+(5, 10, '2020-09-08', '234234', '2020-09-07', 2, '1', '2020-09-08 08:04:40', '2020-09-08 20:25:32'),
+(6, 10, '2020-09-09', '234234123123', '2020-09-16', 1, '1', '2020-09-08 08:07:34', '2020-09-08 20:25:24'),
+(7, 10, '2020-09-01', '213', '2020-09-14', 15, '1', '2020-09-08 08:09:26', '2020-09-08 20:25:41'),
+(8, 1, '2020-09-08', '32143241', '2020-09-15', 1, '1', '2020-09-08 18:44:39', NULL),
+(9, 1, '2020-09-07', '34123', '2020-09-02', 13, '1', '2020-09-08 18:44:59', NULL);
 
 -- --------------------------------------------------------
 
@@ -794,8 +813,8 @@ CREATE TABLE `riwayat_pelatihan` (
   `id` int(11) UNSIGNED NOT NULL,
   `fid_user` int(11) DEFAULT NULL,
   `kategori_diklat` smallint(2) DEFAULT NULL,
-  `nama_diklat` text DEFAULT NULL,
-  `penyelenggara` text DEFAULT NULL,
+  `nama_diklat` text,
+  `penyelenggara` text,
   `tahun` varchar(100) DEFAULT NULL,
   `lama` varchar(100) DEFAULT NULL,
   `no_sttp` varchar(100) DEFAULT NULL,
@@ -809,7 +828,11 @@ CREATE TABLE `riwayat_pelatihan` (
 --
 
 INSERT INTO `riwayat_pelatihan` (`id`, `fid_user`, `kategori_diklat`, `nama_diklat`, `penyelenggara`, `tahun`, `lama`, `no_sttp`, `tgl_sttp`, `created_date`, `updated_date`) VALUES
-(1, 1, 2, 'Tes diklat', 'Bappenas', '2018', '3 Hari', 'Cffdf', '2019-04-05', '2019-04-05 10:03:15', NULL);
+(1, 1, 2, 'Tes diklat', 'Bappenas', '2018', '3 Hari', 'Cffdf', '2019-04-05', '2019-04-05 10:03:15', NULL),
+(2, 10, 2, 'Kampus', 'Pak RT', '2015', '3 TAHUN', '123421354', '2020-09-09', '2020-09-08 20:14:49', '2020-09-08 20:15:54'),
+(3, 10, 3, 'Teknik', 'Pak RW', '2015', '3 TAHUN', '123421354', '2020-09-09', '2020-09-08 20:15:37', '2020-09-08 20:16:10'),
+(4, 10, 1, 'Pemimpin', 'Pak Presiden', '2011', '3 TAHUN', '123421354', '2020-09-09', '2020-09-08 20:15:38', '2020-09-08 20:16:32'),
+(5, 10, 3, 'Teknik Komputer', 'Guru', '2013', '1 Tahun', '31453345', '2020-09-09', '2020-09-08 20:17:07', NULL);
 
 -- --------------------------------------------------------
 
@@ -821,8 +844,8 @@ CREATE TABLE `riwayat_pendidikan` (
   `id` int(11) UNSIGNED NOT NULL,
   `fid_user` int(11) DEFAULT NULL,
   `pendidikan` smallint(2) DEFAULT NULL,
-  `nama_instansi` text DEFAULT NULL,
-  `pimpinan_instansi` text DEFAULT NULL,
+  `nama_instansi` text,
+  `pimpinan_instansi` text,
   `no_ijazah` varchar(100) DEFAULT NULL,
   `tgl_ijazah` date DEFAULT NULL,
   `created_date` timestamp NULL DEFAULT NULL,
@@ -834,7 +857,8 @@ CREATE TABLE `riwayat_pendidikan` (
 --
 
 INSERT INTO `riwayat_pendidikan` (`id`, `fid_user`, `pendidikan`, `nama_instansi`, `pimpinan_instansi`, `no_ijazah`, `tgl_ijazah`, `created_date`, `updated_date`) VALUES
-(1, 1, 1, 'SDN 60 Maros', 'Abdul Rahman', 'xxxx', '2019-04-05', '2019-04-05 10:02:26', NULL);
+(1, 1, 1, 'SDN 60 Maros', 'Abdul Rahman', 'xxxx', '2019-04-05', '2019-04-05 10:02:26', NULL),
+(2, 10, 3, 'Yuppentek 1', 'Rektor', '029282', '2020-09-09', '2020-09-08 20:14:06', '2020-09-08 20:14:16');
 
 -- --------------------------------------------------------
 
@@ -846,7 +870,7 @@ CREATE TABLE `setting` (
   `id` int(11) UNSIGNED NOT NULL,
   `tahun_aktif` varchar(12) DEFAULT '',
   `pengguna` varchar(30) DEFAULT NULL,
-  `ekin_idr` int(11) NOT NULL DEFAULT 3000
+  `ekin_idr` int(11) NOT NULL DEFAULT '3000'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -884,7 +908,7 @@ CREATE TABLE `skp_detil` (
   `id` int(11) UNSIGNED NOT NULL,
   `fid_skp` int(11) DEFAULT NULL,
   `jenis_tugas` smallint(1) DEFAULT NULL,
-  `tugas` text DEFAULT NULL,
+  `tugas` text,
   `ak1` varchar(20) DEFAULT NULL,
   `tar_kuant` varchar(30) DEFAULT NULL,
   `tar_kual` int(11) DEFAULT NULL,
@@ -907,7 +931,7 @@ CREATE TABLE `skp_detil` (
 
 CREATE TABLE `unit_kerja` (
   `id` int(11) UNSIGNED NOT NULL,
-  `nama` text DEFAULT NULL
+  `nama` text
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -936,10 +960,58 @@ INSERT INTO `unit_kerja` (`id`, `nama`) VALUES
 CREATE TABLE `upload` (
   `id_upload` int(11) NOT NULL,
   `id_user` int(11) NOT NULL,
+  `id_form` int(11) NOT NULL,
   `type` varchar(20) NOT NULL,
   `file_name` varchar(50) NOT NULL,
   `file_lokasi` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `upload`
+--
+
+INSERT INTO `upload` (`id_upload`, `id_user`, `id_form`, `type`, `file_name`, `file_lokasi`) VALUES
+(1, 1, 8, '1', '97qwmU1tPNbb-bg.jpg', 'public/file/97qwmU1tPNbb-bg.jpg'),
+(2, 1, 8, '1', 'kle6LZ5k7FBF-pemandangan.jpeg', 'public/file/kle6LZ5k7FBF-pemandangan.jpeg'),
+(3, 1, 8, '1', 'XcHD2HKAwC3m-walpaper.jpg', 'public/file/XcHD2HKAwC3m-walpaper.jpg'),
+(4, 1, 9, '1', 'BLXVqzkwC0hA-walpaper.jpg', 'public/file/BLXVqzkwC0hA-walpaper.jpg'),
+(5, 10, 3, '2', 'C4KZJucY2iWE-walpaper.jpg', 'public/file/C4KZJucY2iWE-walpaper.jpg'),
+(6, 10, 4, '2', 'nTLkpz2JqSq4-bg.jpg', 'public/file/nTLkpz2JqSq4-bg.jpg'),
+(7, 10, 5, '2', 'vheD1uQc2tKs-pemandangan.jpeg', 'public/file/vheD1uQc2tKs-pemandangan.jpeg'),
+(8, 10, 2, '3', 'Pas44TroSNly-walpaper.jpg', 'public/file/Pas44TroSNly-walpaper.jpg'),
+(9, 10, 2, '3', 'CM1Ymxo2Te4j-pemandangan.jpeg', 'public/file/CM1Ymxo2Te4j-pemandangan.jpeg'),
+(10, 10, 2, '4', 'ECSEz22xcQ4j-pemandangan.jpeg', 'public/file/ECSEz22xcQ4j-pemandangan.jpeg'),
+(11, 10, 2, '4', 'ZQ1idHfZHogh-walpaper.jpg', 'public/file/ZQ1idHfZHogh-walpaper.jpg'),
+(12, 10, 3, '4', 'QTM72KUIncFK-bg.jpg', 'public/file/QTM72KUIncFK-bg.jpg'),
+(13, 10, 4, '4', 'ARIoNLUvP8So-pemandangan.jpeg', 'public/file/ARIoNLUvP8So-pemandangan.jpeg'),
+(14, 10, 5, '4', 'zYj4RhXN9UEX-walpaper.jpg', 'public/file/zYj4RhXN9UEX-walpaper.jpg'),
+(15, 10, 2, '6', '7f2AUXQj2759-bg.jpg', 'public/file/7f2AUXQj2759-bg.jpg'),
+(16, 10, 2, '6', '9BcI8m3V2NxE-pemandangan.jpeg', 'public/file/9BcI8m3V2NxE-pemandangan.jpeg'),
+(17, 10, 3, '6', 'KVaU0aTmR7E6-walpaper.jpg', 'public/file/KVaU0aTmR7E6-walpaper.jpg'),
+(18, 10, 3, '6', 'U4ZoYzEspZ3z-pemandangan.jpeg', 'public/file/U4ZoYzEspZ3z-pemandangan.jpeg'),
+(19, 10, 3, '6', 'qJWDCkMbIWep-bg.jpg', 'public/file/qJWDCkMbIWep-bg.jpg'),
+(20, 10, 2, '7', 'H6JGBHUfTFrr-bg.jpg', 'public/file/H6JGBHUfTFrr-bg.jpg'),
+(21, 10, 2, '7', 'mbnEC9t075zB-pemandangan.jpeg', 'public/file/mbnEC9t075zB-pemandangan.jpeg'),
+(22, 10, 3, '7', '7J6ADyVx84p5-walpaper.jpg', 'public/file/7J6ADyVx84p5-walpaper.jpg'),
+(23, 10, 2, '8', 'Kbj5feo5bNqk-bg.jpg', 'public/file/Kbj5feo5bNqk-bg.jpg'),
+(24, 10, 2, '8', 'fMa1PQaBTy1B-walpaper.jpg', 'public/file/fMa1PQaBTy1B-walpaper.jpg'),
+(25, 10, 2, '8', 'ih7cBFnns9NK-pemandangan.jpeg', 'public/file/ih7cBFnns9NK-pemandangan.jpeg'),
+(26, 10, 3, '8', '3cuOB6p1hmlW-walpaper.jpg', 'public/file/3cuOB6p1hmlW-walpaper.jpg'),
+(27, 10, 2, '9', 'KKtguL9ufpvu-pemandangan.jpeg', 'public/file/KKtguL9ufpvu-pemandangan.jpeg'),
+(30, 10, 3, '9', 'ocC3XZQTtOvO-walpaper.jpg', 'public/file/ocC3XZQTtOvO-walpaper.jpg'),
+(31, 10, 2, '9', 'HV9tKLrHV1wE-bg.jpg', 'public/file/HV9tKLrHV1wE-bg.jpg'),
+(32, 10, 2, '10', 'oDAk6hRY3iyk-pemandangan.jpeg', 'public/file/oDAk6hRY3iyk-pemandangan.jpeg'),
+(33, 10, 2, '10', '3VvAI2TNqpzn-walpaper.jpg', 'public/file/3VvAI2TNqpzn-walpaper.jpg'),
+(35, 10, 3, '10', 'OF5DynhhZBHm-bg.jpg', 'public/file/OF5DynhhZBHm-bg.jpg'),
+(36, 10, 2, '11', '6eL8XH5urd1B-pemandangan.jpeg', 'public/file/6eL8XH5urd1B-pemandangan.jpeg'),
+(37, 10, 2, '11', 'FPGnaOd2oawY-walpaper.jpg', 'public/file/FPGnaOd2oawY-walpaper.jpg'),
+(39, 10, 3, '11', '00GGU4mhHGTz-bg.jpg', 'public/file/00GGU4mhHGTz-bg.jpg'),
+(40, 10, 6, '1', 'SxV2DNCK75NR-bg.jpg', 'public/file/SxV2DNCK75NR-bg.jpg'),
+(41, 10, 6, '1', 'ZjX0B4do6QgJ-pemandangan.jpeg', 'public/file/ZjX0B4do6QgJ-pemandangan.jpeg'),
+(42, 10, 5, '1', 'bZ7JWW8aow1n-bg.jpg', 'public/file/bZ7JWW8aow1n-bg.jpg'),
+(43, 10, 5, '1', 'zPC6t3BNiiyt-pemandangan.jpeg', 'public/file/zPC6t3BNiiyt-pemandangan.jpeg'),
+(44, 10, 5, '1', 'qcwBrTYPtxU6-walpaper.jpg', 'public/file/qcwBrTYPtxU6-walpaper.jpg'),
+(45, 10, 7, '1', 'AvAHPTKe9GfF-pemandangan.jpeg', 'public/file/AvAHPTKe9GfF-pemandangan.jpeg');
 
 -- --------------------------------------------------------
 
@@ -951,9 +1023,9 @@ CREATE TABLE `user` (
   `id` int(11) UNSIGNED NOT NULL,
   `fid_user_level` int(11) DEFAULT NULL,
   `username` varchar(35) DEFAULT NULL,
-  `password` text DEFAULT NULL,
+  `password` text,
   `email` varchar(100) DEFAULT NULL,
-  `foto` text DEFAULT NULL,
+  `foto` text,
   `last_logged_in` timestamp NULL DEFAULT NULL,
   `ip_address` varchar(20) DEFAULT NULL,
   `active` enum('YES','NO') NOT NULL DEFAULT 'NO'
@@ -964,9 +1036,9 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id`, `fid_user_level`, `username`, `password`, `email`, `foto`, `last_logged_in`, `ip_address`, `active`) VALUES
-(1, 1, 'dhivar', 'beb83320d5f40511a058fb0548004a94', 'dhivar1818@gmail.com', '39f026bee8f6e9adbbd207c357fa6037.png', '2020-09-04 21:19:37', '::1', 'YES'),
+(1, 1, 'dhivar', 'beb83320d5f40511a058fb0548004a94', 'dhivar1818@gmail.com', '39f026bee8f6e9adbbd207c357fa6037.png', '2020-09-08 19:26:56', '127.0.0.1', 'YES'),
 (9, 2, 'donihmrs', 'ab6ee1d8ee29090a46f27190f4a53d65', 'donihamster88@gmail.com', NULL, NULL, NULL, 'YES'),
-(10, 3, 'anton', '9489cade30f2a404b056cbba1c6c49ae', 'anton@gmail.com', NULL, '2020-09-04 21:17:36', '::1', 'YES');
+(10, 3, 'anton', '9489cade30f2a404b056cbba1c6c49ae', 'anton@gmail.com', NULL, '2020-09-08 18:09:19', '127.0.0.1', 'YES');
 
 -- --------------------------------------------------------
 
@@ -977,7 +1049,7 @@ INSERT INTO `user` (`id`, `fid_user_level`, `username`, `password`, `email`, `fo
 CREATE TABLE `user_level` (
   `id` int(11) UNSIGNED NOT NULL,
   `nama` varchar(50) DEFAULT NULL,
-  `active` tinyint(1) NOT NULL DEFAULT 1
+  `active` tinyint(1) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -1560,230 +1632,191 @@ ALTER TABLE `user_role_backup`
 --
 ALTER TABLE `agenda`
   MODIFY `id` smallint(4) UNSIGNED NOT NULL AUTO_INCREMENT;
-
 --
 -- AUTO_INCREMENT for table `bahasa_asing`
 --
 ALTER TABLE `bahasa_asing`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `disiplin`
 --
 ALTER TABLE `disiplin`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `dp3`
 --
 ALTER TABLE `dp3`
   MODIFY `id` smallint(3) UNSIGNED NOT NULL AUTO_INCREMENT;
-
 --
 -- AUTO_INCREMENT for table `duk`
 --
 ALTER TABLE `duk`
   MODIFY `id` smallint(3) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
 --
 -- AUTO_INCREMENT for table `ekin_keg_bulanan`
 --
 ALTER TABLE `ekin_keg_bulanan`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
-
 --
 -- AUTO_INCREMENT for table `ekin_keg_bulanan_realisasi`
 --
 ALTER TABLE `ekin_keg_bulanan_realisasi`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
-
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `ekin_keg_tahunan`
 --
 ALTER TABLE `ekin_keg_tahunan`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
-
 --
 -- AUTO_INCREMENT for table `ekin_log`
 --
 ALTER TABLE `ekin_log`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=91;
-
 --
 -- AUTO_INCREMENT for table `ekin_log_prilaku`
 --
 ALTER TABLE `ekin_log_prilaku`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
-
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `ekin_prilaku`
 --
 ALTER TABLE `ekin_prilaku`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
-
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `ekin_tambahan_kreatifitas`
 --
 ALTER TABLE `ekin_tambahan_kreatifitas`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-
 --
 -- AUTO_INCREMENT for table `jabatan`
 --
 ALTER TABLE `jabatan`
   MODIFY `id` smallint(3) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
-
 --
 -- AUTO_INCREMENT for table `keluarga`
 --
 ALTER TABLE `keluarga`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `kenaikan_pangkat`
 --
 ALTER TABLE `kenaikan_pangkat`
   MODIFY `id` smallint(3) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
 --
 -- AUTO_INCREMENT for table `kgb`
 --
 ALTER TABLE `kgb`
   MODIFY `id` smallint(3) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
 --
 -- AUTO_INCREMENT for table `menu`
 --
 ALTER TABLE `menu`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
-
 --
 -- AUTO_INCREMENT for table `menu_backup`
 --
 ALTER TABLE `menu_backup`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
-
 --
 -- AUTO_INCREMENT for table `pegawai`
 --
 ALTER TABLE `pegawai`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
-
 --
 -- AUTO_INCREMENT for table `pejabat`
 --
 ALTER TABLE `pejabat`
   MODIFY `id` smallint(3) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
 --
 -- AUTO_INCREMENT for table `penghargaan`
 --
 ALTER TABLE `penghargaan`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `prestasi`
 --
 ALTER TABLE `prestasi`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `profil`
 --
 ALTER TABLE `profil`
   MODIFY `id` smallint(1) UNSIGNED NOT NULL AUTO_INCREMENT;
-
 --
 -- AUTO_INCREMENT for table `ptk`
 --
 ALTER TABLE `ptk`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
-
 --
 -- AUTO_INCREMENT for table `riwayat_jabatan`
 --
 ALTER TABLE `riwayat_jabatan`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT for table `riwayat_kesehatan`
 --
 ALTER TABLE `riwayat_kesehatan`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `riwayat_pangkat`
 --
 ALTER TABLE `riwayat_pangkat`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 --
 -- AUTO_INCREMENT for table `riwayat_pelatihan`
 --
 ALTER TABLE `riwayat_pelatihan`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT for table `riwayat_pendidikan`
 --
 ALTER TABLE `riwayat_pendidikan`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `setting`
 --
 ALTER TABLE `setting`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
 --
 -- AUTO_INCREMENT for table `skp`
 --
 ALTER TABLE `skp`
   MODIFY `id` smallint(3) UNSIGNED NOT NULL AUTO_INCREMENT;
-
 --
 -- AUTO_INCREMENT for table `skp_detil`
 --
 ALTER TABLE `skp_detil`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
-
 --
 -- AUTO_INCREMENT for table `unit_kerja`
 --
 ALTER TABLE `unit_kerja`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
-
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 --
 -- AUTO_INCREMENT for table `upload`
 --
 ALTER TABLE `upload`
-  MODIFY `id_upload` int(11) NOT NULL AUTO_INCREMENT;
-
+  MODIFY `id_upload` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
-
 --
 -- AUTO_INCREMENT for table `user_level`
 --
 ALTER TABLE `user_level`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
-
 --
 -- AUTO_INCREMENT for table `user_role`
 --
 ALTER TABLE `user_role`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=172;
-
 --
 -- AUTO_INCREMENT for table `user_role_backup`
 --
 ALTER TABLE `user_role_backup`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=122;
-COMMIT;
-
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
