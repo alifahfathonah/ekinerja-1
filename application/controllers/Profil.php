@@ -2,6 +2,10 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Profil extends DJ_Admin {
+	public function __construct(){
+		parent::__construct();
+		$this->load->library('uploadfile');
+	} 
 
 	function personal(){
 		$this->data['list_css_plugin'] = array(
@@ -102,11 +106,15 @@ class Profil extends DJ_Admin {
 		if(isset($_POST['id'])){
 			$this->data['flag'] = $_POST['id'];
 			$find_data = $this->global->find_data('riwayat_pangkat', array('id'=>$_POST['id']))->row_array();
+			$files = $this->global->find_data('upload',array('id_form'=>$_POST['id'],'type'=>1))->result();
 			$this->data['find_data'] = $find_data;
 		} else{
 			$this->data['flag'] = 0;
+			$files = array();
 			$this->data['find_data'] = ["fid_user"=>"","tmt"=>"","no_sk"=>"","tgl_sk"=>"","pangkat_golongan"=>"","pejabat_sah"=>""];
 		}
+
+		$this->data['files'] = $files;
 
 		$jabatan = $this->db
 			->select('id')
@@ -137,7 +145,9 @@ class Profil extends DJ_Admin {
 						'pejabat_sah'=>trim($this->input->post("pejabat_sah")),
 						'created_date'=>date('Y-m-d H:i:s')
 					);
-				$simpan = $this->global->save_data('riwayat_pangkat', $data);
+				$simpan = $this->global->save_getLastID('riwayat_pangkat', $data);
+
+				$this->uploadfile->upload_image($_FILES,1,$simpan);
 				if($simpan == "TRUE"){
 					$status = 'success';
 				} else{
@@ -158,6 +168,13 @@ class Profil extends DJ_Admin {
 						'updated_date'=>date('Y-m-d H:i:s')
 					);
 				$simpan = $this->global->edit_data('riwayat_pangkat', $data, array('id'=>$flag));
+
+				if (isset($_FILES['file'])) {
+					if ($_FILES['file']['name'] != "") {
+						$this->uploadfile->upload_image($_FILES,1,$flag);
+					}
+				}
+
 				if($simpan == "TRUE"){
 					$status = 'success';
 				} else{
@@ -166,6 +183,8 @@ class Profil extends DJ_Admin {
 			}
 		}
 		$this->output->set_output(json_encode(array('status'=>$status)));
+
+		redirect('profil/riwayat_kepangkatan');
 	}
 
 	function riwayat_jabatan(){

@@ -33,6 +33,24 @@ class Pegawai extends DJ_Admin {
 		}
 	}
 
+	function deleteFile($id) {
+		$id = base64_decode($id);
+		$explod = explode("|",$id);
+		$this->load->model('upload_model');
+
+		$this->upload_model->hapus($explod[0],$explod[1]);
+
+		if (isset($_SERVER['HTTP_REFERER']))
+        {
+            header('Location: '.$_SERVER['HTTP_REFERER']);
+        }
+        else
+        {
+            header('Location: http://'.$_SERVER['SERVER_NAME']);
+        }
+	}
+	
+
 	function pegawai_json(){
 		$query = $this->db
 			->select('a.*, b.nama AS jabatan, c.email, c.foto, c.active')

@@ -12,5 +12,18 @@ class Upload_model extends CI_Model{
             return FALSE;
         }
     }
+
+    public function hapus($id,$lokasi) {
+		if ($id != null) {
+            if (file_exists($lokasi)) {
+                unlink($lokasi);
+            }
+            $this->db->where('id_upload',$id);
+            $this->db->delete('upload');
+            return 1;
+		} else {
+            return 0;
+        }
+    }
      
 }

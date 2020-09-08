@@ -1973,6 +1973,7 @@ $('#modal_data').on('shown.bs.modal', function () {
 
     if (document.getElementById('form_riwayat_pangkat') != undefined){
         $.validator.setDefaults({ ignore: ":hidden:not(select)" });
+        console.log($(form).serialize())
         $('#form_riwayat_pangkat').validate({
             rules:{
                 tmt: {
@@ -1985,6 +1986,9 @@ $('#modal_data').on('shown.bs.modal', function () {
                     required: true
                 },
                 pejabat_sah: {
+                    required: true
+                },
+                file: {
                     required: true
                 }
             },
