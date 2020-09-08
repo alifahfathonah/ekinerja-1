@@ -129,7 +129,7 @@ class Modal_profil extends DJ_Admin {
 	private function riKepangkatan($idx_user){
 		$no = 1;
 		$query = $this->db
-			->select('a.*, b.nama AS pejabat')
+			->select('a.*, a.id as idForm, b.nama AS pejabat')
 			->where('a.fid_user', $idx_user)
 			->join('pegawai b', 'a.pejabat_sah=b.id')
 			->get('riwayat_pangkat a')->result_array();
@@ -144,17 +144,36 @@ class Modal_profil extends DJ_Admin {
 	                            <th>Nomor SK</th>
 	                            <th>Tanggal SK</th>
 	                            <th>Pejabat Yang Menetapkan</th>
+	                            <th style="text-align:center">Dokumen</th>
 	                        </tr>
                         </thead>
-                        <tbody>';
+						<tbody>';
                        	foreach ($query as $value) {
+							$noFile = 1;
+							$htmlFile = "";
+							$queryFile = $this->db
+								->where('id_user', $idx_user)
+								->where('type', 1)
+								->where('id_form', $value['idForm'])
+								->get('upload')->result();
+							
+							foreach ($queryFile as $file) { 
+								$htmlFile .= '<div class="row" style="padding-left:28%;margin-top:5px">
+								<a target="_blank" href="'.base_url().$file->file_lokasi.'">
+									<span>'.$noFile.'. '.$file->file_name.'</span> 
+								</a>
+								</div>';
+								$noFile++;
+							}
+
                        		$html .= '<tr>
                        				<td class="text-center border-right">'.$no++.'</td>
                        				<td>'.pangkat_golongan($value['pangkat_golongan']).'</td>
                        				<td>'.$value['tmt'].'</td>
                        				<td>'.$value['no_sk'].'</td>
                        				<td>'.$value['tgl_sk'].'</td>
-                       				<td>'.$value['pejabat'].'</td>
+									<td>'.$value['pejabat'].'</td>
+									<td>'.$htmlFile.'</td>
                        			</tr>';
                        	}
         
@@ -167,7 +186,7 @@ class Modal_profil extends DJ_Admin {
 	private function riJabatan($idx_user){
 		$no = 1;
 		$query = $this->db
-			->select('a.*, b.nama AS pejabat')
+			->select('a.*,a.id as idForm, b.nama AS pejabat')
 			->where('a.fid_user', $idx_user)
 			->join('pegawai b', 'a.pejabat_sah=b.id')
 			->get('riwayat_jabatan a')->result_array();
@@ -183,11 +202,30 @@ class Modal_profil extends DJ_Admin {
 	                            <th>TMT</th>
 	                            <th>Nomor SK</th>
 	                            <th>Tanggal SK</th>
-	                            <th>Pejabat Yang Menetapkan</th>
+								<th>Pejabat Yang Menetapkan</th>
+								<th style="text-align:center">Dokumen</th>
 	                        </tr>
                         </thead>
                         <tbody>';
                        	foreach ($query as $value) {
+							$noFile = 1;
+							$htmlFile = "";
+
+							$queryFile = $this->db
+							->where('id_user', $idx_user)
+							->where('type', 2)
+							->where('id_form', $value['idForm'])
+							->get('upload')->result();
+
+							foreach ($queryFile as $file) { 
+								$htmlFile .= '<div class="row" style="padding-left:28%;margin-top:5px">
+								<a target="_blank" href="'.base_url().$file->file_lokasi.'">
+									<span>'.$noFile.'. '.$file->file_name.'</span> 
+								</a>
+								</div>';
+								$noFile++;
+							}
+							
                        		$html .= '<tr>
                        				<td class="text-center border-right">'.$no++.'</td>
                        				<td>'.$value['jabatan'].'</td>
@@ -196,7 +234,8 @@ class Modal_profil extends DJ_Admin {
                        				<td>'.$value['tmt'].'</td>
                        				<td>'.$value['no_sk'].'</td>
                        				<td>'.$value['tgl_sk'].'</td>
-                       				<td>'.$value['pejabat'].'</td>
+									   <td>'.$value['pejabat'].'</td>
+									   <td>'.$htmlFile.'</td>
                        			</tr>';
                        	}
         
@@ -221,18 +260,38 @@ class Modal_profil extends DJ_Admin {
 	                            <th>Instansi</th>
 	                            <th>Kepala Instansi</th>
 	                            <th>Nomor Ijazah</th>
-	                            <th>Tanggal Ijazah</th>
+								<th>Tanggal Ijazah</th>
+								<th style="text-align:center">Dokumen</th>
 	                        </tr>
                         </thead>
-                        <tbody>';
+						<tbody>';
+						
                        	foreach ($query as $value) {
+							$noFile = 1;
+							$htmlFile = "";
+							$queryFile = $this->db
+								->where('id_user', $idx_user)
+								->where('type', 3)
+								->where('id_form', $value['id'])
+								->get('upload')->result();
+							
+							foreach ($queryFile as $file) { 
+								$htmlFile .= '<div class="row" style="padding-left:28%;margin-top:5px">
+								<a target="_blank" href="'.base_url().$file->file_lokasi.'">
+									<span>'.$noFile.'. '.$file->file_name.'</span> 
+								</a>
+								</div>';
+								$noFile++;
+							}
+
                        		$html .= '<tr>
                        				<td class="text-center border-right">'.$no++.'</td>
                        				<td>'.pendidikan($value['pendidikan']).'</td>
                        				<td>'.$value['nama_instansi'].'</td>
                        				<td>'.$value['pimpinan_instansi'].'</td>
                        				<td>'.$value['no_ijazah'].'</td>
-                       				<td>'.$value['tgl_ijazah'].'</td>
+									   <td>'.$value['tgl_ijazah'].'</td>
+									   <td>'.$htmlFile.'</td>
                        			</tr>';
                        	}
         
@@ -251,11 +310,29 @@ class Modal_profil extends DJ_Admin {
 	                            <th>Tahun/Angkatan</th>
 	                            <th>Lama Pendidikan</th>
 	                            <th>No. STPP</th>
-	                            <th>Tanggal STPP</th>
+								<th>Tanggal STPP</th>
+								<th style="text-align:center">Dokumen</th>
 	                        </tr>
                         </thead>
                         <tbody>';
                        	foreach ($query2 as $value) {
+							$noFile = 1;
+							$htmlFile = "";
+							$queryFile = $this->db
+								->where('id_user', $idx_user)
+								->where('type', 4)
+								->where('id_form', $value['id'])
+								->get('upload')->result();
+							
+							foreach ($queryFile as $file) { 
+								$htmlFile .= '<div class="row" style="padding-left:28%;margin-top:5px">
+								<a target="_blank" href="'.base_url().$file->file_lokasi.'">
+									<span>'.$noFile.'. '.$file->file_name.'</span> 
+								</a>
+								</div>';
+								$noFile++;
+							}
+
                        		$html .= '<tr>
                        				<td class="text-center border-right">'.$no2++.'</td>
                        				<td>'.$value['nama_diklat'].'</td>
@@ -263,7 +340,8 @@ class Modal_profil extends DJ_Admin {
                        				<td>'.$value['tahun'].'</td>
                        				<td>'.$value['lama'].'</td>
                        				<td>'.$value['no_sttp'].'</td>
-                       				<td>'.$value['tgl_sttp'].'</td>
+									   <td>'.$value['tgl_sttp'].'</td>
+									   <td>'.$htmlFile.'</td>
                        			</tr>';
                        	}
         
@@ -277,7 +355,7 @@ class Modal_profil extends DJ_Admin {
 		$no = 1;
 		$pegawai = $this->global->find_data('pegawai', array('fid_user'=>$idx_user))->row_array();
 		$query = $this->db
-			->select('a.*, b.jabatan')
+			->select('a.*,a.id as idForm, b.jabatan')
 			->where('a.fid_pegawai', $pegawai['id'])
 			->join('riwayat_jabatan b', 'a.fid_jabatan_akhir=b.id', 'LEFT')
 			->get('duk a')->result_array();
@@ -291,7 +369,7 @@ class Modal_profil extends DJ_Admin {
 	                            <th rowspan="2" class="text-center">Nomor Urut</th>
 	                            <th rowspan="2">Pangkat</th>
 	                            <th rowspan="2">Jabatan</th>
-	                            <th colspan="2" class="text-center">Masa Kerja</th>
+								<th colspan="2" class="text-center">Masa Kerja</th>
 	                        </tr>
 	                        <tr>
 	                        	<th class="text-center">Tahun/Masa Kerja, Angkatan</th>
@@ -307,7 +385,7 @@ class Modal_profil extends DJ_Admin {
                        				<td>'.pangkat_golongan($value['fid_pangkat_akhir']).'</td>
                        				<td>'.$value['jabatan'].'</td>
                        				<td class="text-center">'.$value['thn_masakerja'].'</td>
-                       				<td class="text-center">'.$value['bln_masakerja'].'</td>
+									<td class="text-center">'.$value['bln_masakerja'].'</td>
                        			</tr>';
                        	}
         
@@ -402,16 +480,34 @@ class Modal_profil extends DJ_Admin {
 	                            <th class="text-center border-right" style="width: 1%;">No.</th>
 	                            <th>Tahun</th>
 	                            <th>Tingkat Hukum</th>
-	                            <th>Jenis Hukuman</th>
+								<th>Jenis Hukuman</th>
+								<th style="text-align:center">Dokumen</th>
 	                        </tr>
                         </thead>
                         <tbody>';
                        	foreach ($query as $value) {
+							$noFile = 1;
+							$htmlFile = "";
+							$queryFile = $this->db
+								->where('id_user', $idx_user)
+								->where('type', 6)
+								->where('id_form', $value['id'])
+								->get('upload')->result();
+							
+							foreach ($queryFile as $file) { 
+								$htmlFile .= '<div class="row" style="padding-left:28%;margin-top:5px">
+								<a target="_blank" href="'.base_url().$file->file_lokasi.'">
+									<span>'.$noFile.'. '.$file->file_name.'</span> 
+								</a>
+								</div>';
+								$noFile++;
+							}
                        		$html .= '<tr>
                        				<td class="text-center border-right">'.$no++.'</td>
                        				<td>'.$value['tahun'].'</td>
                        				<td>'.$value['tingkat'].'</td>
-                       				<td>'.$value['jenis'].'</td>
+									   <td>'.$value['jenis'].'</td>
+									   <td>'.$htmlFile.'</td>
                        			</tr>';
                        	}
         
@@ -432,16 +528,35 @@ class Modal_profil extends DJ_Admin {
 	                            <th class="text-center border-right" style="width: 1%;">No.</th>
 	                            <th>Tahun</th>
 	                            <th>Tingkat</th>
-	                            <th>Nama</th>
+								<th>Nama</th>
+								<th style="text-align:center">Dokumen</th>
 	                        </tr>
                         </thead>
                         <tbody>';
                        	foreach ($query as $value) {
+							$noFile = 1;
+							$htmlFile = "";
+							$queryFile = $this->db
+								->where('id_user', $idx_user)
+								->where('type', 7)
+								->where('id_form', $value['id'])
+								->get('upload')->result();
+							
+							foreach ($queryFile as $file) { 
+								$htmlFile .= '<div class="row" style="padding-left:28%;margin-top:5px">
+								<a target="_blank" href="'.base_url().$file->file_lokasi.'">
+									<span>'.$noFile.'. '.$file->file_name.'</span> 
+								</a>
+								</div>';
+								$noFile++;
+							}
+
                        		$html .= '<tr>
                        				<td class="text-center border-right">'.$no++.'</td>
                        				<td>'.$value['tahun'].'</td>
                        				<td>'.$value['tingkat'].'</td>
-                       				<td>'.$value['nama'].'</td>
+									   <td>'.$value['nama'].'</td>
+									   <td>'.$htmlFile.'</td>
                        			</tr>';
                        	}
         
@@ -462,16 +577,35 @@ class Modal_profil extends DJ_Admin {
 	                            <th class="text-center border-right" style="width: 1%;">No.</th>
 	                            <th>Tahun</th>
 	                            <th>Penyakit Yang Pernah Diderita</th>
-	                            <th>Dokter Yang Menangani</th>
+								<th>Dokter Yang Menangani</th>
+								<th style="text-align:center">Dokumen</th>
 	                        </tr>
                         </thead>
                         <tbody>';
                        	foreach ($query as $value) {
+							$noFile = 1;
+							$htmlFile = "";
+							$queryFile = $this->db
+								->where('id_user', $idx_user)
+								->where('type', 8)
+								->where('id_form', $value['id'])
+								->get('upload')->result();
+							
+							foreach ($queryFile as $file) { 
+								$htmlFile .= '<div class="row" style="padding-left:28%;margin-top:5px">
+								<a target="_blank" href="'.base_url().$file->file_lokasi.'">
+									<span>'.$noFile.'. '.$file->file_name.'</span> 
+								</a>
+								</div>';
+								$noFile++;
+							}
+
                        		$html .= '<tr>
                        				<td class="text-center border-right">'.$no++.'</td>
                        				<td>'.$value['tahun'].'</td>
                        				<td>'.$value['penyakit'].'</td>
-                       				<td>'.$value['dokter'].'</td>
+									   <td>'.$value['dokter'].'</td>
+									   <td>'.$htmlFile.'</td>
                        			</tr>';
                        	}
         
@@ -492,16 +626,35 @@ class Modal_profil extends DJ_Admin {
 	                            <th class="text-center border-right" style="width: 1%;">No.</th>
 	                            <th>Bahasa Asing</th>
 	                            <th>Aktif</th>
-	                            <th>Pasif</th>
+								<th>Pasif</th>
+								<th style="text-align:center">Dokumen</th>
 	                        </tr>
                         </thead>
                         <tbody>';
                        	foreach ($query as $value) {
+							$noFile = 1;
+							$htmlFile = "";
+							$queryFile = $this->db
+								->where('id_user', $idx_user)
+								->where('type', 9)
+								->where('id_form', $value['id'])
+								->get('upload')->result();
+							
+							foreach ($queryFile as $file) { 
+								$htmlFile .= '<div class="row" style="padding-left:28%;margin-top:5px">
+								<a target="_blank" href="'.base_url().$file->file_lokasi.'">
+									<span>'.$noFile.'. '.$file->file_name.'</span> 
+								</a>
+								</div>';
+								$noFile++;
+							}
+
                        		$html .= '<tr>
                        				<td class="text-center border-right">'.$no++.'</td>
                        				<td>'.$value['bahasa'].'</td>
                        				<td>'.aktif($value['aktif']).'</td>
-                       				<td>'.aktif($value['pasif']).'</td>
+									   <td>'.aktif($value['pasif']).'</td>
+									   <td>'.$htmlFile.'</td>
                        			</tr>';
                        	}
         
@@ -522,16 +675,35 @@ class Modal_profil extends DJ_Admin {
 	                            <th class="text-center border-right" style="width: 1%;">No.</th>
 	                            <th>Tahun</th>
 	                            <th>Bidang Prestasi</th>
-	                            <th>Tingkat Kejuaraan</th>
+								<th>Tingkat Kejuaraan</th>
+								<th style="text-align:center">Dokumen</th>
 	                        </tr>
                         </thead>
                         <tbody>';
                        	foreach ($query as $value) {
+							$noFile = 1;
+							$htmlFile = "";
+							$queryFile = $this->db
+								->where('id_user', $idx_user)
+								->where('type', 10)
+								->where('id_form', $value['id'])
+								->get('upload')->result();
+							
+							foreach ($queryFile as $file) { 
+								$htmlFile .= '<div class="row" style="padding-left:28%;margin-top:5px">
+								<a target="_blank" href="'.base_url().$file->file_lokasi.'">
+									<span>'.$noFile.'. '.$file->file_name.'</span> 
+								</a>
+								</div>';
+								$noFile++;
+							}
+
                        		$html .= '<tr>
                        				<td class="text-center border-right">'.$no++.'</td>
                        				<td>'.$value['tahun'].'</td>
                        				<td>'.$value['bidang'].'</td>
-                       				<td>'.$value['tingkat'].'</td>
+									   <td>'.$value['tingkat'].'</td>
+									   <td>'.$htmlFile.'</td>
                        			</tr>';
                        	}
         $html .=        '</tbody>
@@ -553,18 +725,37 @@ class Modal_profil extends DJ_Admin {
 	                            <th>Tanggal Lahir</th>
 	                            <th>No. Akte Kelahiran</th>
 	                            <th>Status</th>
-	                            <th>No. Surat Nikah (Istri/Suami)</th>
+								<th>No. Surat Nikah (Istri/Suami)</th>
+								<th style="text-align:center">Dokumen</th>
 	                        </tr>
                         </thead>
                         <tbody>';
                        	foreach ($query as $value) {
+							$noFile = 1;
+							$htmlFile = "";
+							$queryFile = $this->db
+								->where('id_user', $idx_user)
+								->where('type', 11)
+								->where('id_form', $value['id'])
+								->get('upload')->result();
+							
+							foreach ($queryFile as $file) { 
+								$htmlFile .= '<div class="row" style="padding-left:28%;margin-top:5px">
+								<a target="_blank" href="'.base_url().$file->file_lokasi.'">
+									<span>'.$noFile.'. '.$file->file_name.'</span> 
+								</a>
+								</div>';
+								$noFile++;
+							}
+
                        		$html .= '<tr>
                        				<td class="text-center border-right">'.$no++.'</td>
                        				<td>'.$value['nama'].'</td>
                        				<td>'.$value['tgl_lahir'].'</td>
                        				<td>'.$value['akte_lahir'].'</td>
                        				<td>'.$value['status'].'</td>
-                       				<td>'.$value['surat_nikah'].'</td>
+									   <td>'.$value['surat_nikah'].'</td>
+									   <td>'.$htmlFile.'</td>
                        			</tr>';
                        	}
         $html .=        '</tbody>

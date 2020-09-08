@@ -2045,6 +2045,9 @@ $('#modal_data').on('shown.bs.modal', function () {
                 },
                 pejabat_sah: {
                     required: true
+                },
+                file : {
+
                 }
             },
             highlight:function(element) {
@@ -2054,6 +2057,7 @@ $('#modal_data').on('shown.bs.modal', function () {
                 $(element).parents('.form-group').removeClass('has-error');
             },
             submitHandler: function(form) {
+                console.log(form)
                 $.ajax({
                     type: $(form).attr('method'),
                     url: $(form).attr('action'),
@@ -2087,6 +2091,9 @@ $('#modal_data').on('shown.bs.modal', function () {
                     required: true
                 },
                 tgl_ijazah: {
+                    required: true
+                },
+                file: {
                     required: true
                 }
             },
@@ -2183,6 +2190,9 @@ $('#modal_data').on('shown.bs.modal', function () {
                 },
                 jenis: {
                     required: true
+                },
+                file: {
+                    required: true
                 }
             },
             highlight:function(element) {
@@ -2223,6 +2233,9 @@ $('#modal_data').on('shown.bs.modal', function () {
                     required: true
                 },
                 nama: {
+                    required: true
+                },
+                file: {
                     required: true
                 }
             },
@@ -2265,6 +2278,9 @@ $('#modal_data').on('shown.bs.modal', function () {
                 },
                 dokter: {
                     required: true
+                },
+                file: {
+                    required: true
                 }
             },
             highlight:function(element) {
@@ -2304,6 +2320,9 @@ $('#modal_data').on('shown.bs.modal', function () {
                     required: true
                 },
                 pasif: {
+                    required: true
+                },
+                file: {
                     required: true
                 }
             },
@@ -2345,6 +2364,9 @@ $('#modal_data').on('shown.bs.modal', function () {
                     required: true
                 },
                 tingkat: {
+                    required: true
+                },
+                file: {
                     required: true
                 }
             },
@@ -2388,6 +2410,9 @@ $('#modal_data').on('shown.bs.modal', function () {
                     required: true
                 },
                 status: {
+                    required: true
+                },
+                file: {
                     required: true
                 }
             },

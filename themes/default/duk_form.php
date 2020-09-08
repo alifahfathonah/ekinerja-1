@@ -1,4 +1,4 @@
-<form id="form_duk" class="form-horizontal form-bordered" method="POST" action="<?=base_url();?>pegawai/duk_save" role="form">
+<form id="form_duk" enctype="multipart/form-data" class="form-horizontal form-bordered" method="POST" action="<?=base_url();?>pegawai/duk_save" role="form">
     <div class="form-body">
         <div class="form-group hidden">
             <label for="flag" class="col-sm-4 control-label">Flag</label>

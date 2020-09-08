@@ -1,4 +1,4 @@
-<form id="form_riwayat_pendidikan" class="form-horizontal form-bordered" method="POST" action="<?=base_url();?>profil/riwayat_pendidikan_save" role="form">
+<form id="form_riwayat_pendidikans" enctype="multipart/form-data" class="form-horizontal form-bordered" method="POST" action="<?=base_url();?>profil/riwayat_pendidikan_save" role="form">
     <div class="form-body">
         <div class="form-group hidden">
             <label for="flag" class="col-sm-4 control-label">Flag</label>
@@ -35,6 +35,28 @@
             <div class="col-sm-7">
                 <input type="text" class="form-control input-sm tgl_picker" value="<?=(set_value('tgl_ijazah')) ? set_value('tgl_ijazah') : @$find_data['tgl_ijazah'];?>" name="tgl_ijazah">
             </div>
+        </div>
+        <?php if ($files != []) { ?>
+        <div class="form-group">
+            <div class="row" style="padding-left:50px">
+            <label for="pejabat_sah" class="col-sm-4 control-label">Dokumen (Maksimal 3 File) : </label>
+            </div>
+            <?php foreach ($files as $value) { ?>
+                <div class="row" style="padding-left:28%;margin-top:5px">
+                <a target="_blank" href="<?=base_url().$value->file_lokasi?>">
+                    <span><?=$value->file_name?></span> 
+                </a>
+                <?php $base64 = base64_encode($value->id_upload."|".$value->file_lokasi); ?>
+                <a onclick="return confirm('Apakah anda yakin ingin menghapus dokumen ini ?');" href ="<?=base_url()?>pegawai/deleteFile/<?=$base64?>">
+                    <button type="button" class="btn btn-sm btn-danger"><i class="fa fa-close"></i></button>
+                </a>
+                </div>
+            <?php } ?>
+        </div>
+        <?php } ?>
+        <div class="form-group">
+            <label for="files">Upload Gambar Pendukung : (*Allow file : gifjpg|png|jpeg|bmp) </label>
+            <input class="form-control" type="file" id="file" name="file[]" multiple>
         </div>
         
     </div>

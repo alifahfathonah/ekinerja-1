@@ -237,11 +237,15 @@ class Profil extends DJ_Admin {
 		if(isset($_POST['id'])){
 			$this->data['flag'] = $_POST['id'];
 			$find_data = $this->global->find_data('riwayat_jabatan', array('id'=>$_POST['id']))->row_array();
+			$files = $this->global->find_data('upload',array('id_form'=>$_POST['id'],'type'=>2))->result();
 			$this->data['find_data'] = $find_data;
 		} else{
 			$this->data['flag'] = 0;
+			$files = array();
 			$this->data['find_data'] = FALSE;
 		}
+
+		$this->data['files'] = $files;
 		$jabatan = $this->db
 			->select('id')
 			->where('type', 'Pejabat')
@@ -268,7 +272,8 @@ class Profil extends DJ_Admin {
 					'pejabat_sah'=>trim($this->input->post("pejabat_sah")),
 					'created_date'=>date('Y-m-d H:i:s')
 				);
-			$simpan = $this->global->save_data('riwayat_jabatan', $data);
+			$simpan = $this->global->save_getLastID('riwayat_jabatan', $data);
+			$this->uploadfile->upload_image($_FILES,2,$simpan);
 			if($simpan == "TRUE"){
 				$status = 'success';
 			} else{
@@ -286,6 +291,13 @@ class Profil extends DJ_Admin {
 					'updated_date'=>date('Y-m-d H:i:s')
 				);
 			$simpan = $this->global->edit_data('riwayat_jabatan', $data, array('id'=>$flag));
+
+			if (isset($_FILES['file'])) {
+				if ($_FILES['file']['name'] != "") {
+					$this->uploadfile->upload_image($_FILES,2,$flag);
+				}
+			}
+
 			if($simpan == "TRUE"){
 				$status = 'success';
 			} else{
@@ -293,6 +305,8 @@ class Profil extends DJ_Admin {
 			}
 		}
 		$this->output->set_output(json_encode(array('status'=>$status)));
+
+		redirect('profil/riwayat_jabatan');
 	}
 
 	function riwayat_pendidikan(){
@@ -337,11 +351,15 @@ class Profil extends DJ_Admin {
 		if(isset($_POST['id'])){
 			$this->data['flag'] = $_POST['id'];
 			$find_data = $this->global->find_data('riwayat_pendidikan', array('id'=>$_POST['id']))->row_array();
+			$files = $this->global->find_data('upload',array('id_form'=>$_POST['id'],'type'=>3))->result();
 			$this->data['find_data'] = $find_data;
 		} else{
 			$this->data['flag'] = 0;
+			$files = array();
 			$this->data['find_data'] = FALSE;
 		}
+		$this->data['files'] = $files;
+
 		$this->load->view('default/riwayat_pendidikan_form', $this->data);
 	}
 
@@ -362,7 +380,8 @@ class Profil extends DJ_Admin {
 						'tgl_ijazah'=>trim($this->input->post("tgl_ijazah")),
 						'created_date'=>date('Y-m-d H:i:s')
 					);
-				$simpan = $this->global->save_data('riwayat_pendidikan', $data);
+				$simpan = $this->global->save_getLastID('riwayat_pendidikan', $data);
+				$this->uploadfile->upload_image($_FILES,3,$simpan);
 				if($simpan == "TRUE"){
 					$status = 'success';
 				} else{
@@ -383,6 +402,11 @@ class Profil extends DJ_Admin {
 						'updated_date'=>date('Y-m-d H:i:s')
 					);
 				$simpan = $this->global->edit_data('riwayat_pendidikan', $data, array('id'=>$flag));
+				if (isset($_FILES['file'])) {
+					if ($_FILES['file']['name'] != "") {
+						$this->uploadfile->upload_image($_FILES,3,$flag);
+					}
+				}
 				if($simpan == "TRUE"){
 					$status = 'success';
 				} else{
@@ -391,6 +415,7 @@ class Profil extends DJ_Admin {
 			}
 		}
 		$this->output->set_output(json_encode(array('status'=>$status)));
+		redirect('profil/riwayat_pendidikan');
 	}
 
 	function riwayat_diklat_json(){
@@ -414,11 +439,14 @@ class Profil extends DJ_Admin {
 		if(isset($_POST['id'])){
 			$this->data['flag'] = $_POST['id'];
 			$find_data = $this->global->find_data('riwayat_pelatihan', array('id'=>$_POST['id']))->row_array();
+			$files = $this->global->find_data('upload',array('id_form'=>$_POST['id'],'type'=>4))->result();
 			$this->data['find_data'] = $find_data;
 		} else{
 			$this->data['flag'] = 0;
+			$files = array();
 			$this->data['find_data'] = FALSE;
 		}
+		$this->data['files'] = $files;
 		$this->load->view('default/riwayat_pelatihan_form', $this->data);
 	}
 
@@ -436,7 +464,8 @@ class Profil extends DJ_Admin {
 					'tgl_sttp'=>trim($this->input->post("tgl_sttp")),
 					'created_date'=>date('Y-m-d H:i:s')
 				);
-			$simpan = $this->global->save_data('riwayat_pelatihan', $data);
+			$simpan = $this->global->save_getLastID('riwayat_pelatihan', $data);
+			$this->uploadfile->upload_image($_FILES,4,$simpan);
 			if($simpan == "TRUE"){
 				$status = 'success';
 			} else{
@@ -454,6 +483,11 @@ class Profil extends DJ_Admin {
 					'updated_date'=>date('Y-m-d H:i:s')
 				);
 			$simpan = $this->global->edit_data('riwayat_pelatihan', $data, array('id'=>$flag));
+			if (isset($_FILES['file'])) {
+				if ($_FILES['file']['name'] != "") {
+					$this->uploadfile->upload_image($_FILES,4,$flag);
+				}
+			}
 			if($simpan == "TRUE"){
 				$status = 'success';
 			} else{
@@ -461,6 +495,7 @@ class Profil extends DJ_Admin {
 			}
 		}
 		$this->output->set_output(json_encode(array('status'=>$status)));
+		redirect('profil/riwayat_pendidikan');
 	}
 
 	function disiplin(){
@@ -501,11 +536,14 @@ class Profil extends DJ_Admin {
 		if(isset($_POST['id'])){
 			$this->data['flag'] = $_POST['id'];
 			$find_data = $this->global->find_data('disiplin', array('id'=>$_POST['id']))->row_array();
+			$files = $this->global->find_data('upload',array('id_form'=>$_POST['id'],'type'=>6))->result();
 			$this->data['find_data'] = $find_data;
 		} else{
 			$this->data['flag'] = 0;
+			$files = array();
 			$this->data['find_data'] = FALSE;
 		}
+		$this->data['files'] = $files;
 		$this->load->view('default/disiplin_form', $this->data);
 	}
 
@@ -519,7 +557,8 @@ class Profil extends DJ_Admin {
 					'jenis'=>trim($this->input->post("jenis")),
 					'created_date'=>date('Y-m-d H:i:s')
 				);
-			$simpan = $this->global->save_data('disiplin', $data);
+			$simpan = $this->global->save_getLastID('disiplin', $data);
+			$this->uploadfile->upload_image($_FILES,6,$simpan);
 			if($simpan == "TRUE"){
 				$status = 'success';
 			} else{
@@ -533,6 +572,13 @@ class Profil extends DJ_Admin {
 					'updated_date'=>date('Y-m-d H:i:s')
 				);
 			$simpan = $this->global->edit_data('disiplin', $data, array('id'=>$flag));
+
+			if (isset($_FILES['file'])) {
+				if ($_FILES['file']['name'] != "") {
+					$this->uploadfile->upload_image($_FILES,6,$flag);
+				}
+			}
+
 			if($simpan == "TRUE"){
 				$status = 'success';
 			} else{
@@ -540,6 +586,7 @@ class Profil extends DJ_Admin {
 			}
 		}
 		$this->output->set_output(json_encode(array('status'=>$status)));
+		redirect('profil/disiplin');
 	}
 
 	function penghargaan(){
@@ -580,11 +627,14 @@ class Profil extends DJ_Admin {
 		if(isset($_POST['id'])){
 			$this->data['flag'] = $_POST['id'];
 			$find_data = $this->global->find_data('penghargaan', array('id'=>$_POST['id']))->row_array();
+			$files = $this->global->find_data('upload',array('id_form'=>$_POST['id'],'type'=>7))->result();
 			$this->data['find_data'] = $find_data;
 		} else{
 			$this->data['flag'] = 0;
+			$files = array();
 			$this->data['find_data'] = FALSE;
 		}
+		$this->data['files'] = $files;
 		$this->load->view('default/penghargaan_form', $this->data);
 	}
 
@@ -598,7 +648,8 @@ class Profil extends DJ_Admin {
 					'nama'=>trim($this->input->post("nama")),
 					'created_date'=>date('Y-m-d H:i:s')
 				);
-			$simpan = $this->global->save_data('penghargaan', $data);
+			$simpan = $this->global->save_getLastID('penghargaan', $data);
+			$this->uploadfile->upload_image($_FILES,7,$simpan);
 			if($simpan == "TRUE"){
 				$status = 'success';
 			} else{
@@ -612,6 +663,12 @@ class Profil extends DJ_Admin {
 					'updated_date'=>date('Y-m-d H:i:s')
 				);
 			$simpan = $this->global->edit_data('penghargaan', $data, array('id'=>$flag));
+			if (isset($_FILES['file'])) {
+				if ($_FILES['file']['name'] != "") {
+					$this->uploadfile->upload_image($_FILES,7,$flag);
+				}
+			}
+			
 			if($simpan == "TRUE"){
 				$status = 'success';
 			} else{
@@ -619,6 +676,7 @@ class Profil extends DJ_Admin {
 			}
 		}
 		$this->output->set_output(json_encode(array('status'=>$status)));
+		redirect('profil/penghargaan');
 	}
 
 	function riwayat_kesehatan(){
@@ -659,11 +717,14 @@ class Profil extends DJ_Admin {
 		if(isset($_POST['id'])){
 			$this->data['flag'] = $_POST['id'];
 			$find_data = $this->global->find_data('riwayat_kesehatan', array('id'=>$_POST['id']))->row_array();
+			$files = $this->global->find_data('upload',array('id_form'=>$_POST['id'],'type'=>8))->result();
 			$this->data['find_data'] = $find_data;
 		} else{
 			$this->data['flag'] = 0;
+			$files = array();
 			$this->data['find_data'] = FALSE;
 		}
+		$this->data['files'] = $files;
 		$this->load->view('default/riwayat_kesehatan_form', $this->data);
 	}
 
@@ -677,7 +738,8 @@ class Profil extends DJ_Admin {
 					'dokter'=>trim($this->input->post("dokter")),
 					'created_date'=>date('Y-m-d H:i:s')
 				);
-			$simpan = $this->global->save_data('riwayat_kesehatan', $data);
+			$simpan = $this->global->save_getLastID('riwayat_kesehatan', $data);
+			$this->uploadfile->upload_image($_FILES,8,$simpan);
 			if($simpan == "TRUE"){
 				$status = 'success';
 			} else{
@@ -691,6 +753,11 @@ class Profil extends DJ_Admin {
 					'updated_date'=>date('Y-m-d H:i:s')
 				);
 			$simpan = $this->global->edit_data('riwayat_kesehatan', $data, array('id'=>$flag));
+			if (isset($_FILES['file'])) {
+				if ($_FILES['file']['name'] != "") {
+					$this->uploadfile->upload_image($_FILES,8,$flag);
+				}
+			}
 			if($simpan == "TRUE"){
 				$status = 'success';
 			} else{
@@ -698,6 +765,7 @@ class Profil extends DJ_Admin {
 			}
 		}
 		$this->output->set_output(json_encode(array('status'=>$status)));
+		redirect('profil/riwayat_kesehatan');
 	}
 
 	function bahasa_asing(){
@@ -738,11 +806,14 @@ class Profil extends DJ_Admin {
 		if(isset($_POST['id'])){
 			$this->data['flag'] = $_POST['id'];
 			$find_data = $this->global->find_data('bahasa_asing', array('id'=>$_POST['id']))->row_array();
+			$files = $this->global->find_data('upload',array('id_form'=>$_POST['id'],'type'=>9))->result();
 			$this->data['find_data'] = $find_data;
 		} else{
 			$this->data['flag'] = 0;
+			$files = array();
 			$this->data['find_data'] = FALSE;
 		}
+		$this->data['files'] = $files;
 		$this->load->view('default/bahasa_asing_form', $this->data);
 	}
 
@@ -756,7 +827,8 @@ class Profil extends DJ_Admin {
 					'pasif'=>trim($this->input->post("pasif")),
 					'created_date'=>date('Y-m-d H:i:s')
 				);
-			$simpan = $this->global->save_data('bahasa_asing', $data);
+			$simpan = $this->global->save_getLastID('bahasa_asing', $data);
+			$this->uploadfile->upload_image($_FILES,9,$simpan);
 			if($simpan == "TRUE"){
 				$status = 'success';
 			} else{
@@ -770,6 +842,11 @@ class Profil extends DJ_Admin {
 					'updated_date'=>date('Y-m-d H:i:s')
 				);
 			$simpan = $this->global->edit_data('bahasa_asing', $data, array('id'=>$flag));
+			if (isset($_FILES['file'])) {
+				if ($_FILES['file']['name'] != "") {
+					$this->uploadfile->upload_image($_FILES,9,$flag);
+				}
+			}
 			if($simpan == "TRUE"){
 				$status = 'success';
 			} else{
@@ -777,6 +854,7 @@ class Profil extends DJ_Admin {
 			}
 		}
 		$this->output->set_output(json_encode(array('status'=>$status)));
+		redirect('profil/bahasa_asing');
 	}
 
 	function prestasi(){
@@ -817,11 +895,14 @@ class Profil extends DJ_Admin {
 		if(isset($_POST['id'])){
 			$this->data['flag'] = $_POST['id'];
 			$find_data = $this->global->find_data('prestasi', array('id'=>$_POST['id']))->row_array();
+			$files = $this->global->find_data('upload',array('id_form'=>$_POST['id'],'type'=>10))->result();
 			$this->data['find_data'] = $find_data;
 		} else{
 			$this->data['flag'] = 0;
+			$files = array();
 			$this->data['find_data'] = FALSE;
 		}
+		$this->data['files'] = $files;
 		$this->load->view('default/prestasi_form', $this->data);
 	}
 
@@ -835,7 +916,8 @@ class Profil extends DJ_Admin {
 					'bidang'=>trim($this->input->post("bidang")),
 					'created_date'=>date('Y-m-d H:i:s')
 				);
-			$simpan = $this->global->save_data('prestasi', $data);
+			$simpan = $this->global->save_getLastID('prestasi', $data);
+			$this->uploadfile->upload_image($_FILES,10,$simpan);
 			if($simpan == "TRUE"){
 				$status = 'success';
 			} else{
@@ -849,6 +931,11 @@ class Profil extends DJ_Admin {
 					'updated_date'=>date('Y-m-d H:i:s')
 				);
 			$simpan = $this->global->edit_data('prestasi', $data, array('id'=>$flag));
+			if (isset($_FILES['file'])) {
+				if ($_FILES['file']['name'] != "") {
+					$this->uploadfile->upload_image($_FILES,10,$flag);
+				}
+			}
 			if($simpan == "TRUE"){
 				$status = 'success';
 			} else{
@@ -856,6 +943,7 @@ class Profil extends DJ_Admin {
 			}
 		}
 		$this->output->set_output(json_encode(array('status'=>$status)));
+		redirect('profil/prestasi');
 	}
 
 	function keluarga(){
@@ -900,11 +988,14 @@ class Profil extends DJ_Admin {
 		if(isset($_POST['id'])){
 			$this->data['flag'] = $_POST['id'];
 			$find_data = $this->global->find_data('keluarga', array('id'=>$_POST['id']))->row_array();
+			$files = $this->global->find_data('upload',array('id_form'=>$_POST['id'],'type'=>11))->result();
 			$this->data['find_data'] = $find_data;
 		} else{
 			$this->data['flag'] = 0;
+			$files = array();
 			$this->data['find_data'] = FALSE;
 		}
+		$this->data['files'] = $files;
 		$this->load->view('default/keluarga_form', $this->data);
 	}
 
@@ -920,7 +1011,8 @@ class Profil extends DJ_Admin {
 					'surat_nikah'=>trim($this->input->post("surat_nikah")),
 					'created_date'=>date('Y-m-d H:i:s')
 				);
-			$simpan = $this->global->save_data('keluarga', $data);
+			$simpan = $this->global->save_getLastID('keluarga', $data);
+			$this->uploadfile->upload_image($_FILES,11,$simpan);
 			if($simpan == "TRUE"){
 				$status = 'success';
 			} else{
@@ -936,6 +1028,11 @@ class Profil extends DJ_Admin {
 					'updated_date'=>date('Y-m-d H:i:s')
 				);
 			$simpan = $this->global->edit_data('keluarga', $data, array('id'=>$flag));
+			if (isset($_FILES['file'])) {
+				if ($_FILES['file']['name'] != "") {
+					$this->uploadfile->upload_image($_FILES,11,$flag);
+				}
+			}
 			if($simpan == "TRUE"){
 				$status = 'success';
 			} else{
@@ -943,6 +1040,7 @@ class Profil extends DJ_Admin {
 			}
 		}
 		$this->output->set_output(json_encode(array('status'=>$status)));
+		redirect('profil/keluarga');
 	}
 
 }

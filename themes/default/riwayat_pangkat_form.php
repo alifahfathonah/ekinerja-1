@@ -1,4 +1,4 @@
-<form id="form_riwayat_pangkat" enctype="multipart/form-data" class="form-horizontal form-bordered" method="POST" action="<?=base_url();?>profil/riwayat_kepangkatan_save" role='form'>
+<form id="form_riwayat_pangkats" enctype="multipart/form-data" class="form-horizontal form-bordered" method="POST" action="<?=base_url();?>profil/riwayat_kepangkatan_save" role='form'>
     <div class="form-body">
         <div class="form-group hidden">
             <label for="flag" class="col-sm-4 control-label">Flag</label>
@@ -72,7 +72,7 @@
         <?php } ?>
         <div class="form-group">
             <label for="files">Upload Gambar Pendukung : (*Allow file : gifjpg|png|jpeg|bmp) </label>
-            <input class="form-control" type="file" id="file" name="file[]" multiple required>
+            <input class="form-control" type="file" id="file" name="file[]" multiple>
         </div>
     </div>
     <div class="form-footer">
